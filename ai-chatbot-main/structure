@@ -1,0 +1,6 @@
+ai_chatbot/
+│
+├── app.py             # Flask server
+├── chatbot.py         # Chatbot logic
+└── templates/
+    └── index.html     # Web interface
