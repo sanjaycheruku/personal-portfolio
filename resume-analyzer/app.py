@@ -22,6 +22,30 @@ CORS(app)
 UPLOAD_FOLDER = tempfile.gettempdir()
 ALLOWED_EXTENSIONS = {"pdf", "docx", "txt", "md"}
 
+# ─── GLOBAL JSON ERROR HANDLERS ──────────────────────
+@app.errorhandler(400)
+def bad_request(e):
+    return jsonify({"error": f"Bad request: {str(e)}"}), 400
+
+@app.errorhandler(404)
+def not_found(e):
+    return jsonify({"error": "Endpoint not found"}), 404
+
+@app.errorhandler(405)
+def method_not_allowed(e):
+    return jsonify({"error": "Method not allowed"}), 405
+
+@app.errorhandler(413)
+def file_too_large(e):
+    return jsonify({"error": "File too large. Please upload a file under 16 MB."}), 413
+
+@app.errorhandler(500)
+def internal_error(e):
+    return jsonify({"error": f"Internal server error: {str(e)}"}), 500
+
+# Max upload size: 16 MB
+app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
+
 # ─── SKILL TAXONOMY ───────────────────────────────────
 SKILL_TAXONOMY = {
     "Programming Languages": [
@@ -396,7 +420,7 @@ def analyze():
     try:
         resume_text = extract_text_from_file(filepath, ext)
         if len(resume_text.strip()) < 50:
-            return jsonify({"error":"Could not extract enough text from the file."}), 400
+            return jsonify({"error":"Could not extract enough text from the file. Make sure the file has readable text."}), 400
 
         skills          = extract_skills(resume_text)
         score, brkdown  = compute_ats_score(resume_text, job_desc)
@@ -415,6 +439,8 @@ def analyze():
             "suggestions":     suggestions,
             "resume_preview":  resume_text[:1000].strip(),
         })
+    except Exception as e:
+        return jsonify({"error": f"Analysis failed: {str(e)}"}), 500
     finally:
         try: os.remove(filepath)
         except: pass

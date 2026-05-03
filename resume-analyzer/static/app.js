@@ -96,13 +96,24 @@ async function runAnalysis() {
 
   try {
     const res = await fetch("/analyze", { method:"POST", body: formData });
-    const data = await res.json();
-    if (!res.ok || data.error) throw new Error(data.error || "Analysis failed");
+
+    // Safely parse — server may return HTML on unexpected errors
+    let data;
+    const ct = res.headers.get("Content-Type") || "";
+    if (ct.includes("application/json")) {
+      data = await res.json();
+    } else {
+      const text = await res.text();
+      throw new Error(`Server error (${res.status}): unexpected response. Check that the server is running.`);
+    }
+
+    if (!res.ok || data.error) throw new Error(data.error || `Server error (${res.status})`);
     state.results = data;
     renderResults(data);
     showToast("✅ Analysis complete!");
   } catch(err) {
     showToast(`❌ ${err.message}`, "error");
+    console.error("[ResumeAI] Analysis error:", err);
   } finally {
     $("analyze-btn-text").textContent = "Analyze Resume";
     $("analyze-spinner").classList.add("hidden");
@@ -525,7 +536,17 @@ async function downloadResume(format) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-    if (!res.ok) { const e = await res.json(); throw new Error(e.error || "Download failed"); }
+
+    if (!res.ok) {
+      // Try JSON error, fall back to status text
+      const ct = res.headers.get("Content-Type") || "";
+      if (ct.includes("application/json")) {
+        const e = await res.json();
+        throw new Error(e.error || "Download failed");
+      } else {
+        throw new Error(`Server error (${res.status}) — check the server is running.`);
+      }
+    }
 
     const blob = await res.blob();
     const ext  = format === "pdf" ? "pdf" : "docx";
@@ -538,6 +559,7 @@ async function downloadResume(format) {
     showToast(`✅ ${format.toUpperCase()} downloaded!`);
   } catch(err) {
     showToast(`❌ ${err.message}`, "error");
+    console.error("[ResumeAI] Download error:", err);
   } finally {
     btn.innerHTML = orig; btn.disabled = false;
   }
