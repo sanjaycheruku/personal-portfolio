@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, Bot, Sparkles, User, ShoppingBag } from 'lucide-react';
+import { X, Send, Bot, Sparkles, User } from 'lucide-react';
 
 interface Message {
   id: number;

@@ -12,10 +12,10 @@ export const initAI = async () => {
     return extractor;
 };
 
-export const getEmbedding = async (text: string) => {
+export const getEmbedding = async (text: string): Promise<number[]> => {
     const model = await initAI();
     const output = await model(text, { pooling: 'mean', normalize: true });
-    return Array.from(output.data);
+    return Array.from(output.data) as number[];
 };
 
 export const cosineSimilarity = (vecA: number[], vecB: number[]) => {

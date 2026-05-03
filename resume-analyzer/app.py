@@ -189,10 +189,8 @@ def generate_pdf(data: dict, template: str = "modern") -> bytes:
     doc = SimpleDocTemplate(buf, pagesize=A4, leftMargin=2*cm, rightMargin=2*cm,
                             topMargin=1.8*cm, bottomMargin=1.5*cm)
     story = []
-    base  = ts["font"]
-    bold  = base + "-Bold" if "Helvetica" in base else base + "-Bold"
-    try: bold = base + "-Bold"
-    except: bold = "Helvetica-Bold"
+    base = ts["font"]
+    bold = "Times-Bold" if base == "Times-Roman" else base + "-Bold"
 
     def para(txt, size=10, bold_=False, color=colors.black, align=TA_LEFT, space_before=0, space_after=4):
         style = ParagraphStyle("x", fontName=bold if bold_ else base, fontSize=size,

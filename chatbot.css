@@ -120,7 +120,7 @@
     transform: scale(1.1);
 }
 
-.chat-clear:hover {
+#chatClear:hover {
     opacity: 1;
     transform: rotate(90deg);
 }

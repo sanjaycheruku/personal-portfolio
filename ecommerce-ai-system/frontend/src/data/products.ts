@@ -63,7 +63,7 @@ export const products: Product[] = [
     {
         id: 5,
         name: "Grip Pro Fitness Tracker",
-        description: "Advance fitness tracker with AI coaching that analyzes your form and suggests improvements.",
+        description: "Advanced fitness tracker with AI coaching that analyzes your form and suggests improvements.",
         category: "Wearables",
         price: 149.00,
         image_url: "https://images.unsplash.com/photo-1557166983-593964aa0331?auto=format&fit=crop&q=80&w=800",
@@ -117,7 +117,7 @@ export const products: Product[] = [
         image_url: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800",
         ai_rating: 93,
         reviews: [
-            { text: "The holographic UI is stuning.", sentiment: 'positive' }
+            { text: "The holographic UI is stunning.", sentiment: 'positive' }
         ]
     },
     {
