@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova AI - Next Generation Interface</title>
+    <!-- Modern Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dark-theme">
+    <!-- Ambient Background -->
+    <div class="ambient-background">
+        <div class="glow-orb orb-primary"></div>
+        <div class="glow-orb orb-secondary"></div>
+        <div class="glow-orb orb-accent"></div>
+        <div class="noise-overlay"></div>
+    </div>
+    
+    <div class="app-wrapper">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <div class="logo-icon">N</div>
+                <h2>Nova<span>AI</span></h2>
+            </div>
+            
+            <button class="new-chat-btn">
+                <i class="fa-solid fa-plus"></i> New Conversation
+            </button>
+            
+            <div class="history-list">
+                <p class="section-title">Recent Chats</p>
+                <div class="history-item active">
+                    <i class="fa-regular fa-message"></i>
+                    <span>Quantum Computing</span>
+                </div>
+                <div class="history-item">
+                    <i class="fa-regular fa-message"></i>
+                    <span>UI/UX Principles</span>
+                </div>
+            </div>
+            
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <strong>Guest User</strong>
+                        <span>Free Plan</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="nav-left">
+                    <button class="menu-toggle" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+                    <div class="model-selector">
+                        <span class="active-model">Nova 1.5 Pro</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                </div>
+                <div class="nav-right">
+                    <button class="nav-btn" title="Clear Chat"><i class="fa-solid fa-trash-can"></i></button>
+                    <button class="nav-btn" title="Settings"><i class="fa-solid fa-gear"></i></button>
+                </div>
+            </header>
+            
+            <div class="chat-viewport" id="chatArea">
+                <!-- Welcome Screen -->
+                <div class="welcome-screen" id="welcomeScreen">
+                    <div class="bot-hero-avatar">
+                        <div class="hero-ring ring-1"></div>
+                        <div class="hero-ring ring-2"></div>
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <h1>How can I help you today?</h1>
+                    
+                    <div class="suggestion-grid">
+                        <div class="suggestion-card" onclick="setInput('Explain quantum computing in simple terms')">
+                            <i class="fa-solid fa-atom text-purple"></i>
+                            <p>Explain quantum computing</p>
+                            <span>in simple terms</span>
+                        </div>
+                        <div class="suggestion-card" onclick="setInput('Help me debug this python code')">
+                            <i class="fa-solid fa-code text-blue"></i>
+                            <p>Help me debug</p>
+                            <span>this Python code</span>
+                        </div>
+                        <div class="suggestion-card" onclick="setInput('Create a modern UI design system')">
+                            <i class="fa-solid fa-pen-nib text-pink"></i>
+                            <p>Create a modern</p>
+                            <span>UI design system</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Chat Messages (Injected dynamically) -->
+                <div class="chat-messages" id="chatMessages"></div>
+                
+                <!-- Typing Indicator -->
+                <div class="typing-indicator hidden" id="typingIndicator">
+                    <div class="bot-avatar-small"><i class="fa-solid fa-robot"></i></div>
+                    <div class="dots-container">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <button class="attachment-btn"><i class="fa-solid fa-paperclip"></i></button>
+                    <textarea id="userInput" placeholder="Ask Nova anything..." rows="1" autocomplete="off"></textarea>
+                    <button class="mic-btn"><i class="fa-solid fa-microphone"></i></button>
+                    <button class="send-btn" id="sendBtn">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+                <p class="disclaimer">Nova AI can make mistakes. Consider verifying important information.</p>
+            </div>
+        </main>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
