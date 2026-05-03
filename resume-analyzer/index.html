@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="refresh" content="0; url=static/index.html" />
     <title>Redirecting...</title>
+    <script>
+      let path = window.location.pathname;
+      if (!path.endsWith('/')) {
+        path += '/';
+      }
+      window.location.replace(path + "static/index.html");
+    </script>
   </head>
   <body>
-    <p>If you are not redirected automatically, <a href="static/index.html">click here</a>.</p>
+    <p>If you are not redirected automatically, <a href="/personal-portfolio/resume-analyzer/static/index.html">click here</a>.</p>
   </body>
 </html>
