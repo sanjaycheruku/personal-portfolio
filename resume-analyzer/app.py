@@ -230,9 +230,9 @@ def generate_pdf(data: dict, template: str = "modern") -> bytes:
                          Paragraph(period, ParagraphStyle("p", fontName=base, fontSize=9,
                                                            textColor=colors.gray, alignment=1, leading=13))]]
             t = Table(tbl_data, colWidths=["70%","30%"])
-            t.setStyle(TableStyle([("VALIGN","all",(0,0),(-1,-1),"TOP"),
-                                   ("LEFTPADDING","all",(0,0),(-1,-1),0),
-                                   ("RIGHTPADDING","all",(0,0),(-1,-1),0)]))
+            t.setStyle(TableStyle([("VALIGN",(0,0),(-1,-1),"TOP"),
+                                   ("LEFTPADDING",(0,0),(-1,-1),0),
+                                   ("RIGHTPADDING",(0,0),(-1,-1),0)]))
             story.append(t)
             if exp.get("description","").strip():
                 for line in exp["description"].split("\n"):
@@ -253,9 +253,9 @@ def generate_pdf(data: dict, template: str = "modern") -> bytes:
                          Paragraph(period, ParagraphStyle("p2", fontName=base, fontSize=9,
                                                            textColor=colors.gray, alignment=1, leading=13))]]
             t = Table(tbl_data, colWidths=["70%","30%"])
-            t.setStyle(TableStyle([("VALIGN","all",(0,0),(-1,-1),"TOP"),
-                                   ("LEFTPADDING","all",(0,0),(-1,-1),0),
-                                   ("RIGHTPADDING","all",(0,0),(-1,-1),0)]))
+            t.setStyle(TableStyle([("VALIGN",(0,0),(-1,-1),"TOP"),
+                                   ("LEFTPADDING",(0,0),(-1,-1),0),
+                                   ("RIGHTPADDING",(0,0),(-1,-1),0)]))
             story.append(t)
             if edu.get("grade","").strip():
                 story.append(para(f"Grade/CGPA: {edu['grade']}", size=9, color=colors.gray))
