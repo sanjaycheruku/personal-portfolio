@@ -59,9 +59,9 @@ fileInput.addEventListener("change", () => { if (fileInput.files[0]) setFile(fil
 $("fp-remove").addEventListener("click", clearFile);
 
 function setFile(f) {
-  const allowed = ["application/pdf","application/vnd.openxmlformats-officedocument.wordprocessingml.document","text/plain"];
+  const allowed = ["application/pdf","application/vnd.openxmlformats-officedocument.wordprocessingml.document","text/plain","text/markdown"];
   const ext = f.name.split(".").pop().toLowerCase();
-  if (!["pdf","docx","txt"].includes(ext)) { showToast("❌ Only PDF, DOCX or TXT allowed.","error"); return; }
+  if (!["pdf","docx","txt","md"].includes(ext)) { showToast("❌ Only PDF, DOCX, TXT or MD allowed.","error"); return; }
   state.file = f;
   $("fp-name").textContent = f.name;
   $("fp-size").textContent = formatBytes(f.size);

@@ -20,7 +20,7 @@ from reportlab.lib.enums import TA_LEFT, TA_CENTER
 app = Flask(__name__, static_folder="static", static_url_path="")
 CORS(app)
 UPLOAD_FOLDER = tempfile.gettempdir()
-ALLOWED_EXTENSIONS = {"pdf", "docx", "txt"}
+ALLOWED_EXTENSIONS = {"pdf", "docx", "txt", "md"}
 
 # ─── SKILL TAXONOMY ───────────────────────────────────
 SKILL_TAXONOMY = {
@@ -81,7 +81,7 @@ def extract_skills(text):
     text_lower = text.lower()
     found = {}
     for skill, cat in ALL_SKILLS.items():
-        if re.search(r"\b" + re.escape(skill) + r"\b", text_lower):
+        if re.search(r"(?<!\w)" + re.escape(skill) + r"(?!\w)", text_lower):
             found.setdefault(cat, []).append(skill.title())
     return found
 
@@ -96,7 +96,7 @@ def compute_ats_score(text, job_desc=""):
     score += ss
 
     # 2. Keywords / Skills (25pts)
-    found_skills = [s for s in ALL_SKILLS if re.search(r"\b"+re.escape(s)+r"\b", t)]
+    found_skills = [s for s in ALL_SKILLS if re.search(r"(?<!\w)"+re.escape(s)+r"(?!\w)", t)]
     ks = min(25, len(found_skills) * 2)
     breakdown["Skill Keywords"] = {"score": ks, "max": 25, "detail": f"{len(found_skills)} skills detected"}
     score += ks
@@ -104,14 +104,14 @@ def compute_ats_score(text, job_desc=""):
     # 3. Contact info (10pts)
     cs = 0
     if re.search(r"[\w.+\-]+@[\w\-]+\.[a-z]{2,}", t): cs += 4
-    if re.search(r"\+?\d[\d\s\-()\\.]{7,}", text): cs += 3
+    if re.search(r"\+?\d[\d\s\-()\.]{7,}", text): cs += 3
     if re.search(r"linkedin\.com", t): cs += 3
     breakdown["Contact Information"] = {"score": cs, "max": 10, "detail": "Email · Phone · LinkedIn"}
     score += cs
 
     # 4. Quantified achievements (20pts)
-    nums = re.findall(r"\b\d+\s*(%|x|k|m|\+)?\b", t)
-    verbs = [v for v in ACTION_VERBS if v in t]
+    nums = re.findall(r"\b\d+(?:\s*(?:%|x|k|m|\+))?(?!\w)", t)
+    verbs = [v for v in ACTION_VERBS if re.search(r"\b" + v + r"\b", t)]
     qs = min(20, len(nums)*2 + len(verbs))
     breakdown["Impact & Achievements"] = {"score": qs, "max": 20,
         "detail": f"{len(nums)} numbers, {len(verbs)} action verbs found"}
@@ -141,8 +141,8 @@ def compute_ats_score(text, job_desc=""):
 def compute_job_match(resume_text, job_desc):
     if not job_desc.strip(): return 0.0, [], []
     try:
-        jd_skills  = [s for s in ALL_SKILLS if re.search(r"\b"+re.escape(s)+r"\b", job_desc.lower())]
-        res_skills = [s for s in ALL_SKILLS if re.search(r"\b"+re.escape(s)+r"\b", resume_text.lower())]
+        jd_skills  = [s for s in ALL_SKILLS if re.search(r"(?<!\w)"+re.escape(s)+r"(?!\w)", job_desc.lower())]
+        res_skills = [s for s in ALL_SKILLS if re.search(r"(?<!\w)"+re.escape(s)+r"(?!\w)", resume_text.lower())]
         matched  = [s for s in jd_skills if s in res_skills]
         missing  = [s for s in jd_skills if s not in res_skills]
         vec = TfidfVectorizer(stop_words="english")
@@ -388,7 +388,7 @@ def analyze():
     file     = request.files["resume"]
     job_desc = request.form.get("job_description","")
     if not file.filename: return jsonify({"error":"No file selected"}), 400
-    if not allowed_file(file.filename): return jsonify({"error":"Unsupported format. Use PDF, DOCX, or TXT."}), 400
+    if not allowed_file(file.filename): return jsonify({"error":"Unsupported format. Use PDF, DOCX, TXT, or MD."}), 400
 
     filename = secure_filename(file.filename)
     ext      = filename.rsplit(".",1)[1].lower()
